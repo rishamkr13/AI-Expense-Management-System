@@ -1,4 +1,4 @@
-import API from "./axios";
+import API from "./axiosConfig";
 
 export const uploadReceipt = (file) => {
   const formData = new FormData();

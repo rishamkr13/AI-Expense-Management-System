@@ -41,23 +41,38 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      const response = await api.post("/chatbot/ask-ai", {
+      const response = await api.post("/api/chatbot/ask-ai", {
         question: finalQuestion,
       });
 
       const botMessage = {
         type: "bot",
-        text: response.data.answer,
-        source: response.data.source,
+        text:
+          response.data?.answer ||
+          response.data?.message ||
+          "I received your question, but no answer was returned.",
+        source: response.data?.source || "AI",
       };
 
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error("Chatbot error:", error);
 
+      let errorText =
+        "Sorry, I could not process your question right now. Please try again.";
+
+      if (error.response?.status === 401) {
+        errorText = "Session expired. Please login again.";
+      } else if (error.response?.status === 403) {
+        errorText =
+          "Access denied. Please check backend CORS/security config and login token.";
+      } else if (error.response?.data?.message) {
+        errorText = error.response.data.message;
+      }
+
       const errorMessage = {
         type: "bot",
-        text: "Sorry, I could not process your question right now. Please try again.",
+        text: errorText,
         source: "ERROR",
       };
 

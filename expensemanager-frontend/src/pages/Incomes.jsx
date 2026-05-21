@@ -20,13 +20,21 @@ const Incomes = () => {
   const fetchIncomes = async () => {
     try {
       setLoading(true);
+      setMessage("");
 
-      const response = await api.get("/incomes");
+      const response = await api.get("/api/incomes");
 
       setIncomes(response.data || []);
     } catch (error) {
       console.error("Fetch incomes error:", error);
-      setMessage("Failed to load incomes");
+
+      if (error.response?.status === 401) {
+        setMessage("Session expired. Please login again.");
+      } else if (error.response?.status === 403) {
+        setMessage("Access denied. Please check backend security/CORS config.");
+      } else {
+        setMessage("Failed to load incomes");
+      }
     } finally {
       setLoading(false);
     }
@@ -48,7 +56,7 @@ const Incomes = () => {
     setMessage("");
 
     try {
-      await api.post("/incomes", {
+      await api.post("/api/incomes", {
         amount: Number(formData.amount),
         source: formData.source,
         description: formData.description,
@@ -67,20 +75,36 @@ const Incomes = () => {
       fetchIncomes();
     } catch (error) {
       console.error("Add income error:", error);
-      setMessage("Failed to add income");
+
+      if (error.response?.status === 401) {
+        setMessage("Session expired. Please login again.");
+      } else if (error.response?.status === 403) {
+        setMessage("Access denied. Please check backend security/CORS config.");
+      } else {
+        setMessage("Failed to add income");
+      }
     }
   };
 
   const handleDeleteIncome = async (id) => {
     try {
-      await api.delete(`/incomes/${id}`);
+      setMessage("");
+
+      await api.delete(`/api/incomes/${id}`);
 
       setMessage("Income deleted successfully");
 
       fetchIncomes();
     } catch (error) {
       console.error("Delete income error:", error);
-      setMessage("Failed to delete income");
+
+      if (error.response?.status === 401) {
+        setMessage("Session expired. Please login again.");
+      } else if (error.response?.status === 403) {
+        setMessage("Access denied. Please check backend security/CORS config.");
+      } else {
+        setMessage("Failed to delete income");
+      }
     }
   };
 
