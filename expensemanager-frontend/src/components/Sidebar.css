@@ -1,0 +1,314 @@
+.sidebar {
+  width: 230px;
+  min-width: 230px;
+  height: 100vh;
+  background: #090b18;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  overflow: hidden;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  transition:
+    width 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    min-width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar--collapsed {
+  width: 76px;
+  min-width: 76px;
+}
+
+/* Logo section */
+.sidebar-logo {
+  height: 118px;
+  padding: 28px 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sidebar-logo-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6d5dfc, #7c6cff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+  box-shadow: 0 10px 24px rgba(109, 93, 252, 0.22);
+}
+
+.sidebar-logo-text {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 44px;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 135px;
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    max-width 0.28s ease,
+    opacity 0.18s ease,
+    transform 0.28s ease;
+}
+
+/* Toggle button */
+.sidebar-toggle {
+  position: absolute;
+  right: 10px;
+  top: 42px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(124, 108, 255, 0.45);
+  border-radius: 10px;
+  background: rgba(124, 108, 255, 0.12);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition:
+    right 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+  background: rgba(124, 108, 255, 0.28);
+  transform: scale(1.04);
+}
+
+/* Nav */
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 18px 10px 14px;
+  overflow: hidden;
+}
+
+.sidebar-link {
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 0 14px;
+  border-radius: 13px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    padding 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-link:hover {
+  background: rgba(124, 108, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sidebar-link--active {
+  background: rgba(124, 108, 255, 0.18);
+  color: #d9d6ff;
+  border: 1px solid rgba(124, 108, 255, 0.35);
+}
+
+.sidebar-link--active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 4px;
+  height: 65%;
+  border-radius: 999px;
+  background: #7c6cff;
+}
+
+.sidebar-link-icon {
+  min-width: 22px;
+  width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-link-label {
+  overflow: hidden;
+  max-width: 135px;
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    max-width 0.28s ease,
+    opacity 0.18s ease,
+    transform 0.28s ease;
+}
+
+/* Footer */
+.sidebar-footer {
+  padding: 12px 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.sidebar-user {
+  min-height: 64px;
+  padding: 10px 12px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  overflow: hidden;
+}
+
+.sidebar-avatar {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #6d5dfc, #7c6cff);
+  color: white;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-user-info {
+  min-width: 0;
+  overflow: hidden;
+  max-width: 125px;
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    max-width 0.28s ease,
+    opacity 0.18s ease,
+    transform 0.28s ease;
+}
+
+.sidebar-user-name,
+.sidebar-user-email {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.sidebar-user-email {
+  margin-top: 3px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.sidebar-logout {
+  height: 46px;
+  border-radius: 13px;
+  border: 1px solid rgba(255, 94, 120, 0.35);
+  background: rgba(255, 94, 120, 0.08);
+  color: #ff9aaa;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    padding 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-logout:hover {
+  background: rgba(255, 94, 120, 0.14);
+}
+
+/* Collapsed State */
+.sidebar--collapsed .sidebar-logo {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.sidebar--collapsed .sidebar-logo-text,
+.sidebar--collapsed .sidebar-link-label,
+.sidebar--collapsed .sidebar-user-info,
+.sidebar--collapsed .sidebar-logout span {
+  width: 0 !important;
+  max-width: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  overflow: hidden !important;
+  transform: translateX(-10px);
+  pointer-events: none;
+}
+
+.sidebar--collapsed .sidebar-toggle {
+  right: 23px;
+  top: 88px;
+}
+
+.sidebar--collapsed .sidebar-nav {
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
+.sidebar--collapsed .sidebar-link {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+  gap: 0;
+}
+
+.sidebar--collapsed .sidebar-link--active::before {
+  height: 50%;
+}
+
+.sidebar--collapsed .sidebar-footer {
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
+.sidebar--collapsed .sidebar-user {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sidebar--collapsed .sidebar-logout {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+  gap: 0;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 0;
+}

@@ -1,0 +1,32 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f7fb;
+}
+
+.layout-main {
+  margin-left: 230px;
+  width: calc(100% - 230px);
+  min-height: 100vh;
+  background: #f4f7fb;
+  overflow-x: hidden;
+  transition:
+    margin-left 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.layout--sidebar-collapsed .layout-main {
+  margin-left: 76px;
+  width: calc(100% - 76px);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .layout-main {
+    margin-left: 0;
+    width: 100%;
+  }
+}
