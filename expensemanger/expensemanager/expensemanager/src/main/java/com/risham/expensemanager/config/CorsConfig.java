@@ -1,4 +1,4 @@
-package com.expensemanager.config;
+package com.risham.expensemanager.config; // ✅ fixed package
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -29,25 +29,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-
-                        // allow auth APIs
                         .requestMatchers("/api/auth/**").permitAll()
-
-                        // allow browser preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // allow uploaded files if needed
                         .requestMatchers("/uploads/**").permitAll()
-
-                        // protected APIs
                         .requestMatchers("/api/dashboard/**").authenticated()
                         .requestMatchers("/api/expenses/**").authenticated()
                         .requestMatchers("/api/incomes/**").authenticated()
                         .requestMatchers("/api/budgets/**").authenticated()
                         .requestMatchers("/api/chatbot/**").authenticated()
                         .requestMatchers("/api/receipts/**").authenticated()
-
-                        // others also protected
+                        .requestMatchers("/api/analytics/**").authenticated() // ✅ added
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
@@ -61,7 +52,6 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
@@ -71,32 +61,18 @@ public class SecurityConfig {
         ));
 
         config.setAllowedMethods(List.of(
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE",
-                "PATCH",
-                "OPTIONS"
+                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"
         ));
 
         config.setAllowedHeaders(List.of(
-                "Authorization",
-                "Content-Type",
-                "Accept",
-                "Origin"
+                "Authorization", "Content-Type", "Accept", "Origin"
         ));
 
-        config.setExposedHeaders(List.of(
-                "Authorization"
-        ));
-
+        config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
-
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-
         return source;
     }
 }

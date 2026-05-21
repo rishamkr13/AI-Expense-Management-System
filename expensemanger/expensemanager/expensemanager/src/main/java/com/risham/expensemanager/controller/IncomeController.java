@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/incomes")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+// ✅ removed @CrossOrigin
 public class IncomeController {
 
     private final IncomeService incomeService;

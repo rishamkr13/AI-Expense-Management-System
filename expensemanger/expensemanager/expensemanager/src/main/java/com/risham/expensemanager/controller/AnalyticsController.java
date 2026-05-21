@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/analytics")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+// ✅ removed @CrossOrigin
 public class AnalyticsController {
 
     private final AnalyticsService analyticsService;

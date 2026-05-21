@@ -1,16 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowLeft,
-  Upload,
-  FileText,
-  Trash2,
-  RefreshCcw,
-  CheckCircle,
-  AlertCircle,
-  Wand2,
-  ClipboardCheck,
-  X,
+  ArrowLeft, Upload, FileText, Trash2, RefreshCcw,
+  CheckCircle, AlertCircle, Wand2, ClipboardCheck, X,
 } from "lucide-react";
 
 import api from "../api/axiosConfig";
@@ -31,10 +23,9 @@ const Receipts = () => {
   const [singleFile, setSingleFile] = useState(null);
   const [bulkFiles, setBulkFiles] = useState([]);
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("success"); // "success" | "error"
+  const [messageType, setMessageType] = useState("success");
   const [loading, setLoading] = useState(false);
 
-  // Confirm modal state
   const [confirmModal, setConfirmModal] = useState(false);
   const [selectedReceipt, setSelectedReceipt] = useState(null);
   const [confirmForm, setConfirmForm] = useState({
@@ -54,7 +45,7 @@ const Receipts = () => {
   const fetchReceipts = async () => {
     try {
       setLoading(true);
-      const response = await api.get("/receipts");
+      const response = await api.get("/api/receipts"); // ✅ fixed
       setReceipts(response.data || []);
     } catch (error) {
       console.error("Fetch receipts error:", error);
@@ -68,7 +59,6 @@ const Receipts = () => {
     fetchReceipts();
   }, []);
 
-  // ── SINGLE UPLOAD ──
   const handleSingleUpload = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -83,14 +73,14 @@ const Receipts = () => {
 
     try {
       setLoading(true);
-      const response = await api.post("/receipts/upload", formData, {
+      const response = await api.post("/api/receipts/upload", formData, { // ✅ fixed
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       const uploadedReceipt = response.data;
 
       if (uploadedReceipt?.id) {
-        await api.post(`/receipts/${uploadedReceipt.id}/process`);
+        await api.post(`/api/receipts/${uploadedReceipt.id}/process`); // ✅ fixed
       }
 
       showMessage("Receipt uploaded and OCR processed! Now click Confirm to save expense ✅");
@@ -104,7 +94,6 @@ const Receipts = () => {
     }
   };
 
-  // ── BULK UPLOAD ──
   const handleBulkUpload = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -119,7 +108,7 @@ const Receipts = () => {
 
     try {
       setLoading(true);
-      const response = await api.post("/receipts/bulk-upload", formData, {
+      const response = await api.post("/api/receipts/bulk-upload", formData, { // ✅ fixed
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -127,7 +116,7 @@ const Receipts = () => {
 
       for (const receipt of uploadedReceipts) {
         if (receipt?.id) {
-          await api.post(`/receipts/${receipt.id}/process`);
+          await api.post(`/api/receipts/${receipt.id}/process`); // ✅ fixed
         }
       }
 
@@ -142,17 +131,15 @@ const Receipts = () => {
     }
   };
 
-  // ── RE-RUN OCR ──
   const handleProcessReceipt = async (id) => {
     try {
       setLoading(true);
       setMessage("");
-      const res = await api.post(`/receipts/${id}/process`);
+      await api.post(`/api/receipts/${id}/process`); // ✅ fixed
       showMessage("OCR processed! Click Confirm to review and save ✅");
       await fetchReceipts();
 
-      // Auto-open confirm modal after re-processing
-      const updated = await api.get(`/receipts/${id}`);
+      const updated = await api.get(`/api/receipts/${id}`); // ✅ fixed
       openConfirmModal(updated.data);
     } catch (error) {
       console.error("Process receipt error:", error);
@@ -162,12 +149,11 @@ const Receipts = () => {
     }
   };
 
-  // ── DELETE ──
   const handleDeleteReceipt = async (id) => {
     if (!window.confirm("Delete this receipt?")) return;
     try {
       setLoading(true);
-      await api.delete(`/receipts/${id}`);
+      await api.delete(`/api/receipts/${id}`); // ✅ fixed
       showMessage("Receipt deleted");
       await fetchReceipts();
     } catch (error) {
@@ -178,7 +164,6 @@ const Receipts = () => {
     }
   };
 
-  // ── OPEN CONFIRM MODAL ──
   const openConfirmModal = (receipt) => {
     setSelectedReceipt(receipt);
     setConfirmForm({
@@ -190,7 +175,6 @@ const Receipts = () => {
     setConfirmModal(true);
   };
 
-  // ── SUBMIT CONFIRM ──
   const handleConfirmSubmit = async (e) => {
     e.preventDefault();
 
@@ -202,7 +186,7 @@ const Receipts = () => {
     try {
       setConfirmLoading(true);
 
-      await api.post(`/receipts/${selectedReceipt.id}/confirm`, {
+      await api.post(`/api/receipts/${selectedReceipt.id}/confirm`, { // ✅ fixed
         amount: parseFloat(confirmForm.amount),
         merchantName: confirmForm.merchantName,
         expenseDate: confirmForm.expenseDate,
@@ -221,7 +205,6 @@ const Receipts = () => {
     }
   };
 
-  // ── STATUS BADGE ──
   const getStatusBadge = (status) => {
     const s = status || "UPLOADED";
     if (s === "PROCESSED" || s === "SUCCESS") {
@@ -248,8 +231,6 @@ const Receipts = () => {
 
   return (
     <div className="page-container">
-
-      {/* ── PAGE HEADER ── */}
       <div className="page-header">
         <div>
           <Link to="/dashboard" className="back-link">
@@ -268,7 +249,6 @@ const Receipts = () => {
         </div>
       </div>
 
-      {/* ── MESSAGE ── */}
       {message && (
         <div
           className="message-box"
@@ -281,7 +261,6 @@ const Receipts = () => {
         </div>
       )}
 
-      {/* ── UPLOAD FORMS ── */}
       <div className="receipt-upload-grid">
         <div className="form-card">
           <h2><Upload size={22} /> Single Receipt Upload</h2>
@@ -319,7 +298,6 @@ const Receipts = () => {
         </div>
       </div>
 
-      {/* ── RECEIPTS TABLE ── */}
       <div className="list-card receipt-list-card">
         <div className="list-header">
           <h2>Uploaded Receipts</h2>
@@ -358,7 +336,6 @@ const Receipts = () => {
                     <td>{receipt.category || "-"}</td>
                     <td>{getStatusBadge(receipt.status)}</td>
 
-                    {/* Re-run OCR */}
                     <td>
                       <button
                         className="process-btn"
@@ -370,7 +347,6 @@ const Receipts = () => {
                       </button>
                     </td>
 
-                    {/* Confirm button — only show if OCR already ran */}
                     <td>
                       {receipt.status === "PROCESSED" ? (
                         <button
@@ -388,7 +364,6 @@ const Receipts = () => {
                       )}
                     </td>
 
-                    {/* Delete */}
                     <td>
                       <button
                         className="delete-btn"
@@ -406,21 +381,15 @@ const Receipts = () => {
         )}
       </div>
 
-      {/* ── CONFIRM MODAL ── */}
       {confirmModal && selectedReceipt && (
         <div style={styles.overlay}>
           <div style={styles.modal}>
-
-            {/* Modal Header */}
             <div style={styles.modalHeader}>
               <h2 style={{ margin: 0 }}>
                 <ClipboardCheck size={22} style={{ verticalAlign: "middle", marginRight: 8 }} />
                 Confirm Receipt Data
               </h2>
-              <button
-                style={styles.closeBtn}
-                onClick={() => setConfirmModal(false)}
-              >
+              <button style={styles.closeBtn} onClick={() => setConfirmModal(false)}>
                 <X size={20} />
               </button>
             </div>
@@ -429,9 +398,7 @@ const Receipts = () => {
               OCR has extracted this data. Please review, correct if needed, then click Save.
             </p>
 
-            {/* Confirm Form */}
             <form onSubmit={handleConfirmSubmit} style={styles.form}>
-
               <div style={styles.formGroup}>
                 <label style={styles.label}>Amount (₹) *</label>
                 <input
@@ -510,7 +477,6 @@ const Receipts = () => {
   );
 };
 
-// ── MODAL STYLES ──
 const styles = {
   overlay: {
     position: "fixed",

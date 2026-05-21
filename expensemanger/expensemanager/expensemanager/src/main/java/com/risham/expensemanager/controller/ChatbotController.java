@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/chatbot")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+// ✅ removed @CrossOrigin
 public class ChatbotController {
 
     private final ChatbotService chatbotService;
