@@ -6,6 +6,8 @@ import "./Login.css";
 function Login() {
   const navigate = useNavigate();
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -27,7 +29,7 @@ function Login() {
       setError("");
 
       const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        `${API_BASE_URL}/api/auth/login`,
         formData
       );
 
